@@ -1,18 +1,22 @@
-import { Routes, Route } from "react-router-dom";
-import MainLayout from "./layout/MainLayout";
-import Dashboard from "./pages/dashboard";
-import Subscribers from "./pages/subscribers";
-import Packages from "./pages/packages";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MainLayout from './layouts/MainLayout';
+import Dashboard from './pages/Dashboard';
+import Subscriber from './pages/Subscriber';
+import Package from './pages/Package';
 
-export default function App() {
+const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<MainLayout />}>
-        <Route index element={<Dashboard />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="subscribers" element={<Subscribers />} />
-        <Route path="packages" element={<Packages />} />
-      </Route>
-    </Routes>
+    <Router>
+      <Routes>
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/subscriber" element={<Subscriber />} />
+          <Route path="/package" element={<Package />} />
+        </Route>
+      </Routes>
+    </Router>
   );
-}
+};
+
+export default App;

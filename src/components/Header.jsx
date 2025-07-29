@@ -1,37 +1,42 @@
-import user from '../assets/user.svg';
-import searchIcon from '../assets/search-icon.svg';
-import dropdownIcon from '../assets/dropdown-icon.svg';
+import React from 'react';
+import { FiMenu } from 'react-icons/fi'; // Hamburger
+import { BsSearch, BsChevronDown, BsBell } from 'react-icons/bs'; // Thay svg bằng icon đồng bộ
+import user from '../assets/user.svg'; // Giữ user svg
 
-const Header = () => {
+const Header = ({ toggleSidebar, sidebarWidth }) => { // Nhận thêm sidebarWidth prop
   return (
-    <header className="fixed top-0 left-64 right-0 bg-white shadow-md p-4 flex items-center justify-between z-10">
-      <div className="relative flex items-center">
-        <div className="relative w-64">
-            <img
-            src={searchIcon}
-            alt="Search icon"
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5"
-            />
+    <header 
+      className="fixed top-0 bg-white border-r border-gray-200 p-4 flex items-center justify-between z-10 transition-all duration-300"
+      style={{ left: sidebarWidth, right: 0 }} // Responsive theo Sidebar width
+    >
+      <div className="flex items-center">
+        <button onClick={toggleSidebar} className="mr-4 text-gray-700 hover:text-blue-600">
+          <FiMenu className="text-2xl" />
+        </button>
+        <div className="relative flex items-center">
+          <div className="relative w-64">
+            <BsSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg" /> {/* Thay svg */}
             <input
-            type="text"
-            placeholder="Search"
-            className="bg-gray-100 rounded-full py-2 pl-10 pr-4 w-full focus:outline-none focus:ring-2 focus:ring-purple-600"
+              type="text"
+              placeholder="Search"
+              className="bg-gray-100 rounded-full py-2 pl-10 pr-4 w-full focus:outline-none focus:ring-2 focus:ring-purple-600"
             />
+          </div>
         </div>
       </div>
       <div className="flex items-center space-x-4">
         <div className="flex items-center">
           <span className="text-gray-700 mr-1">Tiếng Việt</span>
-          <img src={dropdownIcon} alt="Dropdown icon" className="w-3 h-3" />
+          <BsChevronDown className="text-gray-700 text-sm" /> {/* Thay svg */}
         </div>
         <div className="relative">
-          <span className="text-blue-500">🔔</span>
+          <BsBell className="text-blue-500 text-xl" /> {/* Thay emoji bằng icon */}
           <span className="absolute top-0 right-0 bg-red-500 rounded-full w-2 h-2"></span>
         </div>
         <div className="flex items-center">
           <img
             src={user}
-            alt="Moni Roy"
+            alt="Dat Le Khanh"
             className="w-8 h-8 rounded-full mr-2"
           />
           <div>

@@ -1,61 +1,79 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom'; // Dùng NavLink cho active highlight
-import logo from '../assets/Mobifone.svg';
-import { BsCircle, BsHeart, BsInbox, BsListUl, BsClipboardCheck, BsCalendar, BsChatDots, BsReceipt, BsPerson, BsGear, BsBoxArrowRight } from 'react-icons/bs'; // Icons match Figma (thay nếu cần)
+import React from "react";
+import { NavLink } from "react-router-dom";
+import logo from "../assets/Mobifone.svg";
+import {
+  BsCircle,
+  BsHeart,
+  BsInbox,
+  BsListUl,
+  BsClipboardCheck,
+  BsChatDots,
+  BsReceipt,
+  BsPerson,
+  BsGear,
+  BsBoxArrowRight,
+} from "react-icons/bs";
 
 const Sidebar = ({ isOpen }) => {
+  const itemClass = (isActive = false) => `
+    flex items-center h-12 text-gray-700 hover:text-blue-600 hover:bg-blue-100 rounded cursor-pointer transition-all duration-300
+    ${isActive ? "text-blue-600 bg-blue-100" : ""}
+    ${isOpen ? "w-full justify-start px-4" : "w-16 justify-center"}
+  `;
+
+  const menuItems = [
+    { label: "Dashboard", icon: BsCircle, path: "/" },
+    { label: "Subscriber", icon: BsHeart, path: "/subscriber" },
+    { label: "Package", icon: BsInbox, path: "/package" },
+    { label: "Order Lists", icon: BsListUl, path: "/orders" },
+    { label: "To-Do", icon: BsClipboardCheck, path: "/todo" },
+    { label: "Contact", icon: BsChatDots, path: "/contact" },
+    { label: "Invoice", icon: BsReceipt, path: "/invoice" },
+    { label: "Profile", icon: BsPerson, path: "/profile" },
+    { label: "Settings", icon: BsGear, path: "/settings" },
+    { label: "Logout", icon: BsBoxArrowRight, path: "/login" },
+  ];
+
   return (
-    <aside className={`fixed top-0 left-0 h-screen bg-white shadow-lg p-4 transition-all duration-300 ${isOpen ? 'w-64' : 'w-20 overflow-hidden'}`}>
+    <aside
+      className={`fixed top-0 left-0 h-screen bg-white border-r border-gray-200 p-4 transition-all duration-300 ${
+        isOpen ? "w-64" : "w-20"
+      }`}
+    >
+      {/* Logo */}
       <div className="flex justify-center items-center mb-6">
-        <img src={logo} alt="Mobifone" className="h-6 object-contain" />
+        <img src={logo} alt="Mobifone" className="h-6 object-contain m-3" />
       </div>
-      <ul className="space-y-4">
-        <li>
-          <NavLink to="/" className={({ isActive }) => `flex items-center text-gray-700 hover:text-blue-600 hover:bg-blue-100 rounded p-2 ${isActive ? 'text-blue-600 bg-blue-100' : ''}`}>
-            <BsCircle className="mr-3 text-xl flex-shrink-0" />
-            {isOpen && <span>Dashboard</span>}
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/subscriber" className={({ isActive }) => `flex items-center text-gray-700 hover:text-blue-600 hover:bg-blue-100 rounded p-2 ${isActive ? 'text-blue-600 bg-blue-100' : ''}`}>
-            <BsHeart className="mr-3 text-xl flex-shrink-0" /> {/* Icon cho Subscriber, thay nếu cần */}
-            {isOpen && <span>Subscriber</span>}
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/package" className={({ isActive }) => `flex items-center text-gray-700 hover:text-blue-600 hover:bg-blue-100 rounded p-2 ${isActive ? 'text-blue-600 bg-blue-100' : ''}`}>
-            <BsInbox className="mr-3 text-xl flex-shrink-0" /> {/* Icon cho Package */}
-            {isOpen && <span>Package</span>}
-          </NavLink>
-        </li>
-        <li className="flex items-center text-gray-700 hover:text-blue-600 hover:bg-blue-100 rounded p-2 cursor-pointer">
-          <BsListUl className="mr-3 text-xl flex-shrink-0" />
-          {isOpen && <span>Order Lists</span>}
-        </li>
-        <li className="flex items-center text-gray-700 hover:text-blue-600 hover:bg-blue-100 rounded p-2 cursor-pointer">
-          <BsClipboardCheck className="mr-3 text-xl flex-shrink-0" />
-          {isOpen && <span>To-Do</span>}
-        </li>
-        <li className="flex items-center text-gray-700 hover:text-blue-600 hover:bg-blue-100 rounded p-2 cursor-pointer">
-          <BsChatDots className="mr-3 text-xl flex-shrink-0" />
-          {isOpen && <span>Contact</span>}
-        </li>
-        <li className="flex items-center text-gray-700 hover:text-blue-600 hover:bg-blue-100 rounded p-2 cursor-pointer">
-          <BsReceipt className="mr-3 text-xl flex-shrink-0" />
-          {isOpen && <span>Invoice</span>}
-        </li>
-        <li className="flex items-center text-gray-700 hover:text-blue-600 hover:bg-blue-100 rounded p-2 cursor-pointer">
-          <BsPerson className="mr-3 text-xl flex-shrink-0" />
-          {isOpen && <span>Profile</span>}
-        </li>
-        <li className="flex items-center text-gray-700 hover:text-blue-600 hover:bg-blue-100 rounded p-2 cursor-pointer">
-          <BsGear className="mr-3 text-xl flex-shrink-0" />
-          {isOpen && <span>Settings</span>}
-        </li>
-        <li className="flex items-center text-gray-700 hover:text-blue-600 hover:bg-blue-100 rounded p-2 cursor-pointer">
-          <BsBoxArrowRight className="mr-3 text-xl flex-shrink-0" />
-          {isOpen && <span>Logout</span>}
-        </li>
+
+      {/* Menu */}
+      <ul className="space-y-1">
+        {menuItems.map((item, index) => (
+          <li key={index}>
+            <NavLink
+              to={item.path}
+              className={({ isActive }) => itemClass(isActive)}
+              onClick={(e) => {
+                if (item.label === "Logout") {
+                  e.preventDefault();
+                  console.log("Handle logout here");
+                }
+              }}
+            >
+              {/* Icon đồng kích thước (20px) */}
+              <span className="flex items-center justify-center w-8 h-8">
+                <item.icon size={20} />
+              </span>
+              {/* Label */}
+              <span
+                className={`ml-3 whitespace-nowrap transition-all duration-300 ${
+                  isOpen ? "opacity-100" : "opacity-0 w-0 overflow-hidden"
+                }`}
+              >
+                {item.label}
+              </span>
+            </NavLink>
+          </li>
+        ))}
       </ul>
     </aside>
   );

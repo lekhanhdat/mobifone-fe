@@ -31,7 +31,7 @@ const Sidebar = ({ isOpen }) => {
     { label: "Invoice", icon: BsReceipt, path: "/invoice" },
     { label: "Profile", icon: BsPerson, path: "/profile" },
     { label: "Settings", icon: BsGear, path: "/settings" },
-    { label: "Logout", icon: BsBoxArrowRight, path: "#" },
+    { label: "Logout", icon: BsBoxArrowRight, path: "/logout" }, // sau này logic xong chuyển path thành #
   ];
 
   return (

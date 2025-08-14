@@ -53,27 +53,28 @@ const Subscriber = () => {
     }
   }, [filters.province, newSub.PROVINCE, selectedSub]);
 
+  const fetchSubs = async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams({
+        page, limit,
+        ...(filters.type && { type: filters.type }),
+        ...(filters.staType && { staType: filters.staType }),
+        ...(filters.subType && { subType: filters.subType }),
+        ...(filters.province && { province: filters.province }),
+        ...(filters.district && { district: filters.district }),
+        ...(filters.search && { search: filters.search })
+      });
+      const res = await axios.get(`http://localhost:5000/api/subscribers?${params}`);
+      setSubscribers(res.data.subscribers);
+      setTotal(res.data.total);
+    } catch (err) {
+      console.error('Error fetching subscribers:', err);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchSubs = async () => {
-      setLoading(true);
-      try {
-        const params = new URLSearchParams({
-          page, limit,
-          ...(filters.type && { type: filters.type }),
-          ...(filters.staType && { staType: filters.staType }),
-          ...(filters.subType && { subType: filters.subType }),
-          ...(filters.province && { province: filters.province }),
-          ...(filters.district && { district: filters.district }),
-          ...(filters.search && { search: filters.search })
-        });
-        const res = await axios.get(`http://localhost:5000/api/subscribers?${params}`);
-        setSubscribers(res.data.subscribers);
-        setTotal(res.data.total);
-      } catch (err) {
-        console.error('Error fetching subscribers:', err);
-      }
-      setLoading(false);
-    };
     fetchSubs();
   }, [page, filters]);
 
@@ -132,7 +133,7 @@ const Subscriber = () => {
     try {
       await axios.post('http://localhost:5000/api/subscribers', newSub);
       setNewSub({ TYPE: '', STA_TYPE: '', SUB_ID: '', SUB_TYPE: '', STA_DATE: '', END_DATE: '', PROVINCE: '', DISTRICT: '', PCK_CODE: '', PCK_DATE: '', PCK_CHARGE: '' });
-      setPage(1);
+      fetchSubs();
       alert('Thêm thành công!');
     } catch (err) {
       console.error('Error adding:', err);
@@ -142,10 +143,24 @@ const Subscriber = () => {
 
   const handleEdit = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/subscribers/${selectedSub._id}`, selectedSub);
+      // Clean body: Exclude enriched fields
+      const cleanBody = {
+        TYPE: selectedSub.TYPE,
+        STA_TYPE: selectedSub.STA_TYPE,
+        SUB_ID: selectedSub.SUB_ID,
+        SUB_TYPE: selectedSub.SUB_TYPE,
+        STA_DATE: selectedSub.STA_DATE,
+        END_DATE: selectedSub.END_DATE,
+        PROVINCE: selectedSub.PROVINCE,
+        DISTRICT: selectedSub.DISTRICT,
+        PCK_CODE: selectedSub.PCK_CODE,
+        PCK_DATE: selectedSub.PCK_DATE,
+        PCK_CHARGE: selectedSub.PCK_CHARGE
+      };
+      await axios.put(`http://localhost:5000/api/subscribers/${selectedSub._id}`, cleanBody);
       setIsEdit(false);
       setSelectedSub(null);
-      setPage(page);
+      fetchSubs();
       alert('Cập nhật thành công!');
     } catch (err) {
       console.error('Error editing:', err);
@@ -157,7 +172,7 @@ const Subscriber = () => {
     if (window.confirm('Xác nhận xóa?')) {
       try {
         await axios.delete(`http://localhost:5000/api/subscribers/${id}`);
-        setPage(page);
+        fetchSubs(); // Refresh immediately
         alert('Xóa thành công!');
       } catch (err) {
         console.error('Error deleting:', err);
@@ -217,14 +232,14 @@ const Subscriber = () => {
       <p>Showing {(page - 1) * limit + 1}-{Math.min(page * limit, total)} of {total}</p>
       <div>
         <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="px-2 py-1 bg-blue-100 text-blue-600 rounded">Prev</button>
-        <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="px-4 py-1 bg-blue-100 text-blue-600 rounded ml-2">Next</button>
+        <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="px-2 py-1 bg-blue-100 text-blue-600 rounded ml-2">Next</button>
       </div>
     </div>
   );
 
   return (
     <div className="p-4 bg-blue-50 min-h-screen">
-      <h2 className="text-2xl font-bold mb-4 text-blue-600">Trang Thuê Bao</h2>
+      <h2 className="text-2xl font-bold mb-4 text-blue-600"> Trang Thuê Bao</h2>
 
       <div className="flex flex-col md:flex-row justify-between mb-8">
         <div className="w-full md:w-1/2 p-4 bg-white rounded shadow">
@@ -328,7 +343,7 @@ const Subscriber = () => {
             <tbody>
               {subscribers.map(sub => (
                 <tr key={sub._id} onClick={() => openDetails(sub)} className="cursor-pointer hover:bg-blue-50">
-                  <td className="p-2">{sub.SUB_ID.toString()}</td>
+                  <td className="p-2">{sub.SUB_ID.toLocaleString()}</td>
                   <td className="p-2">{mapType(sub.TYPE)}</td>
                   <td className="p-2">{sub.fullStaType}</td>
                   <td className="p-2">{new Date(sub.STA_DATE).toLocaleDateString()}</td>

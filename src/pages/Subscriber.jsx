@@ -238,8 +238,8 @@ const Subscriber = () => {
   );
 
   return (
-    <div className="p-4 bg-blue-50 min-h-screen">
-      <h2 className="text-2xl font-bold mb-4 text-blue-600"> Trang Thuê Bao</h2>
+    <div className="p-6 bg-blue-50 min-h-screen">
+      <h2 className="text-3xl font-bold text-blue-600 mb-6 mt-2"> Quản Lý Thuê Bao</h2>
 
       <div className="flex flex-col md:flex-row justify-between mb-8">
         <div className="w-full md:w-1/2 p-4 bg-white rounded shadow">

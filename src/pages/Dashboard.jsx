@@ -132,66 +132,69 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-gray-800">Dashboard</h2>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-lg shadow flex items-center">
-          <BsPeople className="text-purple-600 text-3xl mr-4 bg-purple-100 p-2 rounded-full" />
+    <div className="p-6 bg-blue-50 min-h-screen">
+      <h2 className="text-3xl font-bold text-blue-600 mb-6 mt-2">Dashboard</h2>
+      {/* Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div className="bg-white p-6 rounded-lg shadow-md flex items-center border border-blue-100 hover:shadow-lg transition-shadow">
+          <BsPeople className="text-purple-600 text-4xl mr-4 bg-purple-100 p-2 rounded-full" />
           <div>
-            <p className="text-sm text-gray-500">Tổng số thuê bao</p>
-            <p className="text-2xl font-bold">{stats.total.toLocaleString()}</p>
+            <p className="text-sm text-gray-600">Tổng số thuê bao</p>
+            <p className="text-2xl font-bold text-blue-600">{stats.total.toLocaleString()}</p>
           </div>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow flex items-center">
-          <BsPersonAdd className="text-green-600 text-3xl mr-4 bg-green-100 p-2 rounded-full" />
+        <div className="bg-white p-6 rounded-lg shadow-md flex items-center border border-blue-100 hover:shadow-lg transition-shadow">
+          <BsPersonAdd className="text-green-600 text-4xl mr-4 bg-green-100 p-2 rounded-full" />
           <div>
-            <p className="text-sm text-gray-500">Thuê bao mới</p>
-            <p className="text-2xl font-bold">{stats.newSubs.toLocaleString()}</p>
+            <p className="text-sm text-gray-600">Thuê bao mới</p>
+            <p className="text-2xl font-bold text-blue-600">{stats.newSubs.toLocaleString()}</p>
             <PercentChange value={stats.percentNew} />
           </div>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow flex items-center">
-          <BsPersonDash className="text-red-600 text-3xl mr-4 bg-red-100 p-2 rounded-full" />
+        <div className="bg-white p-6 rounded-lg shadow-md flex items-center border border-blue-100 hover:shadow-lg transition-shadow">
+          <BsPersonDash className="text-red-600 text-4xl mr-4 bg-red-100 p-2 rounded-full" />
           <div>
-            <p className="text-sm text-gray-500">Thuê bao hủy</p>
-            <p className="text-2xl font-bold">{stats.canceledSubs.toLocaleString()}</p>
+            <p className="text-sm text-gray-600">Thuê bao hủy</p>
+            <p className="text-2xl font-bold text-blue-600">{stats.canceledSubs.toLocaleString()}</p>
             <PercentChange value={stats.percentCanceled} />
           </div>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow flex items-center">
-          <BsBox className="text-yellow-600 text-3xl mr-4 bg-yellow-100 p-2 rounded-full" />
+        <div className="bg-white p-6 rounded-lg shadow-md flex items-center border border-blue-100 hover:shadow-lg transition-shadow">
+          <BsBox className="text-yellow-600 text-4xl mr-4 bg-yellow-100 p-2 rounded-full" />
           <div>
-            <p className="text-sm text-gray-500">Tổng số gói cước đăng ký</p>
-            <p className="text-2xl font-bold">{stats.totalPackages.toLocaleString()}</p>
+            <p className="text-sm text-gray-600">Tổng số gói cước đăng ký</p>
+            <p className="text-2xl font-bold text-blue-600">{stats.totalPackages.toLocaleString()}</p>
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      {/* Filter */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Từ (tháng/năm)</label>
-          <input type="month" name="from" value={filter.from} onChange={handleFilterChange} className="w-full border border-gray-300 p-2 rounded focus:border-blue-500 focus:ring-2 focus:ring-blue-200 hover:shadow-md transition duration-200 cursor-pointer" />
+          <label className="block text-sm font-medium text-gray-700 mb-2">Từ (tháng/năm)</label>
+          <input type="month" name="from" value={filter.from} onChange={handleFilterChange} className="w-full p-3 border border-blue-200 rounded-md focus:border-blue-600 focus:ring-2 focus:ring-blue-100 hover:shadow-md transition duration-200" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Đến (tháng/năm)</label>
-          <input type="month" name="to" value={filter.to} onChange={handleFilterChange} className="w-full border border-gray-300 p-2 rounded focus:border-blue-500 focus:ring-2 focus:ring-blue-200 hover:shadow-md transition duration-200 cursor-pointer" />
+          <label className="block text-sm font-medium text-gray-700 mb-2">Đến (tháng/năm)</label>
+          <input type="month" name="to" value={filter.to} onChange={handleFilterChange} className="w-full p-3 border border-blue-200 rounded-md focus:border-blue-600 focus:ring-2 focus:ring-blue-100 hover:shadow-md transition duration-200" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Tỉnh</label>
-          <select name="province" value={filter.province} onChange={handleFilterChange} className="w-full border border-gray-300 p-2 rounded focus:border-blue-500 focus:ring-2 focus:ring-blue-200 hover:shadow-md transition duration-200 cursor-pointer">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Tỉnh</label>
+          <select name="province" value={filter.province} onChange={handleFilterChange} className="w-full p-3 border border-blue-200 rounded-md focus:border-blue-600 focus:ring-2 focus:ring-blue-100 hover:shadow-md transition duration-200">
             <option value="">Chọn tỉnh</option>
             {(options.provinces || []).map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Quận/Huyện</label>
-          <select name="district" value={filter.district} onChange={handleFilterChange} className="w-full border border-gray-300 p-2 rounded focus:border-blue-500 focus:ring-2 focus:ring-blue-200 hover:shadow-md transition duration-200 cursor-pointer" disabled={!filter.province}>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Quận/Huyện</label>
+          <select name="district" value={filter.district} onChange={handleFilterChange} className="w-full p-3 border border-blue-200 rounded-md focus:border-blue-600 focus:ring-2 focus:ring-blue-100 hover:shadow-md transition duration-200" disabled={!filter.province}>
             <option value="">Chọn quận/huyện</option>
             {districtOptions.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
           </select>
         </div>
       </div>
-      <div className="bg-white p-4 rounded-lg shadow">
-        <h3 className="text-lg font-bold text-gray-800 mb-4">Xu hướng phát triển thuê bao (dựa trên thuê bao mới)</h3>
+      {/* Line Chart */}
+      <div className="bg-white p-6 rounded-lg shadow-md border border-blue-100">
+        <h3 className="text-xl font-bold text-blue-600 mb-4">Xu hướng phát triển thuê bao (dựa trên thuê bao mới)</h3>
         <Line data={lineData} options={lineOptions} />
       </div>
     </div>

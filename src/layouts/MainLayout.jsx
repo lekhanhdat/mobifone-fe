@@ -14,7 +14,7 @@ const MainLayout = () => {
       <div className="flex flex-1">
         <Sidebar isOpen={isOpen} />
         <main 
-          className={`transition-all duration-300 flex-1 pt-16 p-4 bg-[#F5F6FA]`} 
+          className={`transition-all duration-300 flex-1 pt-16 bg-blue-50`} 
           style={{ marginLeft: sidebarWidth }} // Main responsive theo Sidebar
         >
           <Outlet />

@@ -101,8 +101,7 @@ const Package = () => {
         </div>
       </div>
 
-      {/* Phần Thêm Gói Cước Mới - giống Subscriber add */}
-      <div className="mb-4">
+      <div className="mb-8 bg-white p-4 rounded shadow">
         <h3 className="text-lg font-bold mb-2">Thêm Gói Cước Mới</h3>
         <form onSubmit={handleAddPackage} className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input type="text" name="PCK_CODE" value={newPackage.PCK_CODE} onChange={handleNewPackageChange} placeholder="Tên gói cước (PCK_CODE)" className="p-2 border rounded" required />
@@ -112,11 +111,9 @@ const Package = () => {
       </div>
 
       <div className="mb-8 bg-white p-4 rounded shadow relative">
-        <h3 className="text-xl font-bold text-blue-600 mb-4">Danh Sách Gói Cước (Chỉ Có Gói)</h3>
-
-        {/* Search */}
-        <div className="mb-4">
-          <input type="text" value={filters.search} onChange={handleSearchChange} placeholder="Tìm tên gói cước" className="w-full p-2 border rounded focus:outline-none focus:border-blue-600" />
+        <div className="flex justify-between items-center mb-8">
+          <h3 className="text-xl font-bold text-blue-600 mb-4">Danh Sách Gói Cước (Chỉ Có Gói)</h3>
+          <input type="text" value={filters.search} onChange={handleSearchChange} placeholder="Tìm tên gói cước" className="w-1/3 p-2 border rounded focus:outline-none focus:border-blue-600" />
         </div>
 
         {/* Loading overlay to avoid flash */}

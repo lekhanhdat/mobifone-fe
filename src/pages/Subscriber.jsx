@@ -136,10 +136,11 @@ const Subscriber = () => {
       fetchSubs();
       alert('Thêm thành công!');
     } catch (err) {
-      console.error('Error adding:', err);
-      alert('Lỗi: ' + (err.response?.data?.message || err.message));
-    }
-  };
+        console.error('Error adding:', err);
+        const errorMessage = err.response?.data?.message || 'Lỗi thêm thuê bao. Vui lòng thử lại!';
+        alert(errorMessage);  
+      }
+    };
 
   const handleEdit = async () => {
     try {
@@ -277,11 +278,31 @@ const Subscriber = () => {
             <option value="">Loại thuê bao (SUB_TYPE)</option>
             {(options.subTypes || []).map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
           </select>
-          <select name="PCK_CODE" value={newSub.PCK_CODE} onChange={(e) => setNewSub({ ...newSub, PCK_CODE: e.target.value })} className="p-2 border rounded">
-            <option value="">Mã gói cước (PCK_CODE)</option>
-            {(options.pckCodes || []).map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
-          </select>
-          <input name="PCK_DATE" type="date" value={newSub.PCK_DATE} onChange={(e) => setNewSub({ ...newSub, PCK_DATE: e.target.value })} className="p-2 border rounded" />
+          <select 
+              name="PCK_CODE" 
+              value={newSub.PCK_CODE} 
+              onChange={(e) => {
+                const value = e.target.value;
+                setNewSub(prev => ({ 
+                  ...prev, 
+                  PCK_CODE: value,
+                  PCK_DATE: value ? prev.PCK_DATE : ''  // Reset PCK_DATE nếu PCK_CODE rỗng
+                }));
+              }} 
+              className="p-2 border rounded"
+            >
+              <option value="">Mã gói cước (PCK_CODE)</option>
+              {(options.pckCodes || []).map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+            </select>
+            <input 
+              name="PCK_DATE" 
+              type="date" 
+              value={newSub.PCK_DATE} 
+              onChange={(e) => setNewSub({ ...newSub, PCK_DATE: e.target.value })} 
+              className="p-2 border rounded" 
+              disabled={!newSub.PCK_CODE}  // Disabled nếu PCK_CODE rỗng
+              required={!!newSub.PCK_CODE}  // Required nếu PCK_CODE có giá trị
+            />
           <button type="submit" className="col-span-1 md:col-span-3 bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Thêm</button>
         </form>
       </div>

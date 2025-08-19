@@ -11,6 +11,7 @@ const Package = () => {
   const [pieProvince, setPieProvince] = useState({ labels: [], datasets: [] });
   const [pieDistrict, setPieDistrict] = useState({ labels: [], datasets: [] });
   const [filters, setFilters] = useState({ search: '', sortBy: 'count', sortOrder: 'desc' });
+  const [newPackage, setNewPackage] = useState({ PCK_CODE: '', PCK_CHARGE: '' });
 
   const fetchPackages = async () => {
     setLoading(true);
@@ -60,15 +61,29 @@ const Package = () => {
   }, []);
 
   const handleSort = (column) => {
-    let newOrder = 'desc';
-    if (filters.sortBy === column) {
-      newOrder = filters.sortOrder === 'desc' ? 'asc' : 'desc'; // Toggle đúng
-    }
+    const newOrder = (filters.sortBy === column && filters.sortOrder === 'desc') ? 'asc' : 'desc';
     setFilters(prev => ({ ...prev, sortBy: column, sortOrder: newOrder }));
   };
 
   const handleSearchChange = (e) => {
     setFilters(prev => ({ ...prev, search: e.target.value }));
+  };
+
+  const handleNewPackageChange = (e) => {
+    const { name, value } = e.target;
+    setNewPackage(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddPackage = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:5000/api/packages', newPackage);
+      setNewPackage({ PCK_CODE: '', PCK_CHARGE: '' });
+      fetchPackages(); // Refresh table
+      alert(response.data.message); // 'Thêm thành công'
+    } catch (err) {
+      alert(err.response?.data?.message || 'Lỗi thêm gói cước');
+    }
   };
 
   return (
@@ -84,6 +99,16 @@ const Package = () => {
           <h3 className="text-lg font-semibold mb-2 text-blue-600">Phân Bổ Thuê Bao Có Gói Cước Theo Quận/Huyện</h3>
           <Pie data={pieDistrict} options={{ responsive: true, plugins: { legend: { position: 'right' } } }} />
         </div>
+      </div>
+
+      {/* Phần Thêm Gói Cước Mới - giống Subscriber add */}
+      <div className="mb-4">
+        <h3 className="text-lg font-bold mb-2">Thêm Gói Cước Mới</h3>
+        <form onSubmit={handleAddPackage} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="text" name="PCK_CODE" value={newPackage.PCK_CODE} onChange={handleNewPackageChange} placeholder="Tên gói cước (PCK_CODE)" className="p-2 border rounded" required />
+          <input type="number" name="PCK_CHARGE" value={newPackage.PCK_CHARGE} onChange={handleNewPackageChange} placeholder="Giá gói cước (PCK_CHARGE)" className="p-2 border rounded" required />
+          <button type="submit" className="col-span-2 px-4 py-2 bg-blue-600 text-white rounded">Thêm</button>
+        </form>
       </div>
 
       <div className="mb-8 bg-white p-4 rounded shadow relative">

@@ -260,16 +260,11 @@ const Subscriber = () => {
             <option value="">Hình thức (TYPE)</option>
             {(options.types || []).map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
           </select>
+          <input name="STA_DATE" type="date" value={newSub.STA_DATE} onChange={(e) => setNewSub({ ...newSub, STA_DATE: e.target.value })} className="p-2 border rounded" required />
           <select name="STA_TYPE" value={newSub.STA_TYPE} onChange={(e) => setNewSub({ ...newSub, STA_TYPE: e.target.value })} className="p-2 border rounded" required>
             <option value="">Loại hòa mạng (STA_TYPE)</option>
             {(options.staTypes || []).map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
           </select>
-          <select name="SUB_TYPE" value={newSub.SUB_TYPE} onChange={(e) => setNewSub({ ...newSub, SUB_TYPE: e.target.value })} className="p-2 border rounded" required>
-            <option value="">Loại thuê bao (SUB_TYPE)</option>
-            {(options.subTypes || []).map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-          </select>
-          <input name="STA_DATE" type="date" value={newSub.STA_DATE} onChange={(e) => setNewSub({ ...newSub, STA_DATE: e.target.value })} className="p-2 border rounded" required />
-          <input name="END_DATE" type="date" value={newSub.END_DATE} onChange={(e) => setNewSub({ ...newSub, END_DATE: e.target.value })} className="p-2 border rounded" />
           <select name="PROVINCE" value={newSub.PROVINCE} onChange={(e) => setNewSub({ ...newSub, PROVINCE: e.target.value })} className="p-2 border rounded" required>
             <option value="">Tỉnh (PROVINCE)</option>
             {(options.provinces || []).map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
@@ -277,13 +272,16 @@ const Subscriber = () => {
           <select name="DISTRICT" value={newSub.DISTRICT} onChange={(e) => setNewSub({ ...newSub, DISTRICT: e.target.value })} className="p-2 border rounded" disabled={!newSub.PROVINCE} required>
             <option value="">Huyện (DISTRICT)</option>
             {districtOptions.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
+          </select>          
+          <select name="SUB_TYPE" value={newSub.SUB_TYPE} onChange={(e) => setNewSub({ ...newSub, SUB_TYPE: e.target.value })} className="p-2 border rounded" required>
+            <option value="">Loại thuê bao (SUB_TYPE)</option>
+            {(options.subTypes || []).map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
           </select>
           <select name="PCK_CODE" value={newSub.PCK_CODE} onChange={(e) => setNewSub({ ...newSub, PCK_CODE: e.target.value })} className="p-2 border rounded">
             <option value="">Mã gói cước (PCK_CODE)</option>
             {(options.pckCodes || []).map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
           </select>
           <input name="PCK_DATE" type="date" value={newSub.PCK_DATE} onChange={(e) => setNewSub({ ...newSub, PCK_DATE: e.target.value })} className="p-2 border rounded" />
-          <input name="PCK_CHARGE" type="number" value={newSub.PCK_CHARGE} onChange={(e) => setNewSub({ ...newSub, PCK_CHARGE: e.target.value })} placeholder="Phí gói (PCK_CHARGE)" className="p-2 border rounded" />
           <button type="submit" className="col-span-1 md:col-span-3 bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Thêm</button>
         </form>
       </div>

@@ -10,18 +10,27 @@ const Package = () => {
   const [loading, setLoading] = useState(true);
   const [pieProvince, setPieProvince] = useState({ labels: [], datasets: [] });
   const [pieDistrict, setPieDistrict] = useState({ labels: [], datasets: [] });
+  const [filters, setFilters] = useState({ search: '', sortBy: 'count', sortOrder: 'desc' });
+
+  const fetchPackages = async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams({
+        search: filters.search,
+        sortBy: filters.sortBy,
+        sortOrder: filters.sortOrder
+      });
+      const response = await axios.get(`http://localhost:5000/api/stats/packages?${params}`);
+      setPackages(response.data);
+    } catch (err) {
+      console.error('Error fetching packages:', err);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/stats/packages')
-      .then(response => {
-        setPackages(response.data);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error fetching packages:', error);
-        setLoading(false);
-      });
-  }, []);
+    fetchPackages();
+  }, [filters]);
 
   useEffect(() => {
     const fetchPies = async () => {
@@ -50,6 +59,18 @@ const Package = () => {
     fetchPies();
   }, []);
 
+  const handleSort = (column) => {
+    let newOrder = 'desc';
+    if (filters.sortBy === column) {
+      newOrder = filters.sortOrder === 'desc' ? 'asc' : 'desc'; // Toggle đúng
+    }
+    setFilters(prev => ({ ...prev, sortBy: column, sortOrder: newOrder }));
+  };
+
+  const handleSearchChange = (e) => {
+    setFilters(prev => ({ ...prev, search: e.target.value }));
+  };
+
   return (
     <div className="p-6 bg-blue-50 min-h-screen">
       <h2 className="text-3xl font-bold text-blue-600 mb-6 mt-2">Quản Lý Gói Cước</h2>
@@ -65,38 +86,64 @@ const Package = () => {
         </div>
       </div>
 
-      <div className="mb-8 bg-white p-4 rounded shadow">
+      <div className="mb-8 bg-white p-4 rounded shadow relative">
         <h3 className="text-xl font-bold text-blue-600 mb-4">Danh Sách Gói Cước (Chỉ Có Gói)</h3>
-        {loading ? <p className="text-blue-600">Đang tải...</p> : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tên Gói Cước</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Charge Riêng</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tổng Số Lượng Đăng Ký</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tổng Charge</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {packages.length === 0 ? (
-                  <tr>
-                    <td colSpan="4" className="px-6 py-4 text-gray-500 text-center">Không có gói cước nào</td>
-                  </tr>
-                ) : (
-                  packages.map(pkg => (
-                    <tr key={pkg._id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-700">{pkg._id}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-700">{pkg.avgCharge.toLocaleString()}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-700">{pkg.count.toLocaleString()}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-700">{pkg.totalCharge.toLocaleString()}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+
+        {/* Search */}
+        <div className="mb-4">
+          <input type="text" value={filters.search} onChange={handleSearchChange} placeholder="Tìm tên gói cước" className="w-full p-2 border rounded focus:outline-none focus:border-blue-600" />
+        </div>
+
+        {/* Loading overlay to avoid flash */}
+        {loading && (
+          <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
+            <p className="text-blue-600">Đang tải...</p>
           </div>
         )}
+
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tên Gói Cước</th>
+                <th className="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Charge Riêng
+                  <button onClick={() => handleSort('charge')} className="ml-2 text-blue-600 hover:text-blue-800">
+                    {filters.sortBy === 'charge' && filters.sortOrder === 'asc' ? '↑' : '↓'}
+                  </button>
+                </th>
+                <th className="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Tổng Số Lượng Đăng Ký
+                  <button onClick={() => handleSort('count')} className="ml-2 text-blue-600 hover:text-blue-800">
+                    {filters.sortBy === 'count' && filters.sortOrder === 'asc' ? '↑' : '↓'}
+                  </button>
+                </th>
+                <th className="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Tổng Charge
+                  <button onClick={() => handleSort('totalCharge')} className="ml-2 text-blue-600 hover:text-blue-800">
+                    {filters.sortBy === 'totalCharge' && filters.sortOrder === 'asc' ? '↑' : '↓'}
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {packages.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="px-6 py-4 text-gray-500 text-center">Không có gói cước nào</td>
+                </tr>
+              ) : (
+                packages.map((pkg, index) => (
+                  <tr key={pkg._id} className={`${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50 transition`}>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-700">{pkg._id}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-700">{pkg.charge.toLocaleString('de-DE')}</td> 
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-700">{pkg.count.toLocaleString()}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-700">{pkg.totalCharge.toLocaleString()}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

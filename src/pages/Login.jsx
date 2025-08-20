@@ -17,7 +17,8 @@ function Login() {
     setError('');
     try {
       const res = await instance.post('http://localhost:5000/api/auth/login', { identifier: email, password });
-      localStorage.setItem('token', res.data.token);  // Save JWT token
+      localStorage.setItem('token', res.data.token);  // Lưu token
+      localStorage.setItem('user', JSON.stringify(res.data.user));  // Lưu user object (fullName, etc.)
       navigate('/');  // Redirect to dashboard
     } catch (err) {
       setError(err.response?.data?.message || 'Lỗi đăng nhập');

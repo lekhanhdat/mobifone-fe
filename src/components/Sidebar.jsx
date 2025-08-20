@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/Mobifone.svg";
+import { useNavigate } from 'react-router-dom';
 import {
   BsCircle,
   BsHeart,
@@ -34,6 +35,14 @@ const Sidebar = ({ isOpen }) => {
     { label: "Logout", icon: BsBoxArrowRight, path: "/logout" }, // sau này logic xong chuyển path thành #
   ];
 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');  // Redirect to login
+  };
+
   return (
     <aside
       className={`fixed top-0 left-0 h-screen bg-white border-r border-gray-200 p-4 transition-all duration-300 ${
@@ -49,29 +58,28 @@ const Sidebar = ({ isOpen }) => {
       <ul className="space-y-1">
         {menuItems.map((item, index) => (
           <li key={index}>
-            <NavLink
-              to={item.path}
-              className={({ isActive }) => itemClass(isActive)}
-              onClick={(e) => {
-                if (item.label === "Logout") {
-                  e.preventDefault();
-                  console.log("Handle logout here");
-                }
-              }}
-            >
-              {/* Icon đồng kích thước (20px) */}
-              <span className="flex items-center justify-center w-8 h-8">
-                <item.icon size={20} />
-              </span>
-              {/* Label */}
-              <span
-                className={`ml-3 whitespace-nowrap transition-all duration-300 ${
-                  isOpen ? "opacity-100" : "opacity-0 w-0 overflow-hidden"
-                }`}
+            {item.label === "Logout" ? (
+              <button
+                onClick={handleLogout}  // Click logout
+                className={itemClass(false)}  // Style giống NavLink, no active
               >
-                {item.label}
-              </span>
-            </NavLink>
+                <span className="flex items-center justify-center w-8 h-8">
+                  <item.icon size={20} />
+                </span>
+                <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${isOpen ? "opacity-100" : "opacity-0 w-0 overflow-hidden"}`}>
+                  {item.label}
+                </span>
+              </button>
+            ) : (
+              <NavLink to={item.path} className={({ isActive }) => itemClass(isActive)}>
+                <span className="flex items-center justify-center w-8 h-8">
+                  <item.icon size={20} />
+                </span>
+                <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${isOpen ? "opacity-100" : "opacity-0 w-0 overflow-hidden"}`}>
+                  {item.label}
+                </span>
+              </NavLink>
+            )}
           </li>
         ))}
       </ul>

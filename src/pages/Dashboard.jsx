@@ -1,6 +1,5 @@
-// src/pages/Dashboard.jsx
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Hoặc dùng instance từ utils/axios.js nếu bạn có
+import axios from 'axios'; 
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -21,6 +20,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 const Dashboard = () => {
   const [stats, setStats] = useState({ total: 0, newSubs: 0, canceledSubs: 0, totalPackages: 0, percentNew: 0, percentCanceled: 0 });
   const [trend, setTrend] = useState([]);
+  const [packageTrend, setPackageTrend] = useState([]);
   const [filter, setFilter] = useState({ from: '', to: '', province: '', district: '' });
   const [options, setOptions] = useState({ provinces: [] });
   const [districtOptions, setDistrictOptions] = useState([]);
@@ -76,6 +76,10 @@ const Dashboard = () => {
         setStats(statsRes.data);
         const trendRes = await axios.get(`http://localhost:5000/api/stats/trend?${params.toString()}`);
         setTrend(trendRes.data);
+        
+        // Fetch cho package trend 
+        const packageTrendRes = await axios.get(`http://localhost:5000/api/stats/package-trend?${params.toString()}`);
+        setPackageTrend(packageTrendRes.data);
       } catch (err) {
         console.error('Error fetching data:', err);
       } finally {
@@ -96,6 +100,7 @@ const Dashboard = () => {
 
   if (loading) return <p className="text-center text-gray-500">Đang tải dữ liệu...</p>;
 
+  // Data cho biểu đồ thuê bao
   const labels = trend.map(t => t.label);
   const dataPoints = trend.map(t => t.count);
   const lineData = {
@@ -104,6 +109,21 @@ const Dashboard = () => {
       label: 'Thuê bao mới',
       data: dataPoints,
       borderColor: '#3b82f6',
+      backgroundColor: 'rgba(59, 130, 246, 0.2)',
+      fill: true,
+      tension: 0.4,
+    }],
+  };
+
+  // Data cho biểu đồ gói cước 
+  const packageLabels = packageTrend.map(t => t.label); 
+  const packageDataPoints = packageTrend.map(t => t.count);
+  const packageLineData = {
+    labels: packageLabels,
+    datasets: [{
+      label: 'Gói cước mới',
+      data: packageDataPoints,
+      borderColor: '#3b82f6', // Màu amber để phân biệt
       backgroundColor: 'rgba(59, 130, 246, 0.2)',
       fill: true,
       tension: 0.4,
@@ -129,13 +149,13 @@ const Dashboard = () => {
     <p className="text-sm">
       <span className={value > 0 ? 'text-green-500' : 'text-red-500'}>
         {value > 0 ? '↑' : '↓'} {Math.abs(value)}%
-      </span> so với tháng trước
+      </span> so với kỳ trước
     </p>
   );
 
   return (
     <div className="p-6 bg-blue-50 min-h-screen">
-      <h2 className="text-3xl font-bold text-blue-600 mb-6">Dashboard</h2> {/* Thêm tiêu đề nếu cần */}
+      <h2 className="text-3xl font-bold text-blue-600 mb-6">Dashboard</h2>
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         {/* Card Tổng số thuê bao - Link đến /subscriber */}
@@ -199,9 +219,15 @@ const Dashboard = () => {
         </div>
       </div>
       {/* Line Chart */}
-      <div className="bg-white p-6 rounded-lg shadow-md border border-blue-100">
+      {/* Biểu đồ đường hiện tại (thuê bao) */}
+      <div className="bg-white p-6 rounded-lg shadow-md border border-blue-100 mb-6"> {/* Thêm mb-6 để khoảng cách với biểu đồ mới */}
         <h3 className="text-xl font-bold text-blue-600 mb-4">Xu hướng phát triển thuê bao (dựa trên thuê bao mới)</h3>
         <Line data={lineData} options={lineOptions} />
+      </div>
+      {/* Biểu đồ đường mới (gói cước) - Giao diện tương tự, đặt phía dưới */}
+      <div className="bg-white p-6 rounded-lg shadow-md border border-blue-100">
+        <h3 className="text-xl font-bold text-blue-600 mb-4">Xu hướng phát triển gói cước (dựa trên đăng ký mới)</h3>
+        <Line data={packageLineData} options={lineOptions} />
       </div>
     </div>
   );

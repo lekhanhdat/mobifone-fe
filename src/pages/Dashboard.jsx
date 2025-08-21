@@ -55,39 +55,40 @@ const Dashboard = () => {
     fetchDistricts();
   }, [filter.province]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const params = new URLSearchParams();
-        if (filter.from) {
-          const [fromYear, fromMonth] = filter.from.split('-');
-          params.append('fromMonth', fromMonth);
-          params.append('fromYear', fromYear);
-        }
-        if (filter.to) {
-          const [toYear, toMonth] = filter.to.split('-');
-          params.append('toMonth', toMonth);
-          params.append('toYear', toYear);
-        }
-        if (filter.province) params.append('province', filter.province);
-        if (filter.district) params.append('district', filter.district);
-
-        const statsRes = await axios.get(`http://localhost:5000/api/stats/summary?${params.toString()}`);
-        setStats(statsRes.data);
-        const trendRes = await axios.get(`http://localhost:5000/api/stats/trend?${params.toString()}`);
-        setTrend(trendRes.data);
-        
-        // Fetch cho package trend 
-        const packageTrendRes = await axios.get(`http://localhost:5000/api/stats/package-trend?${params.toString()}`);
-        setPackageTrend(packageTrendRes.data);
-      } catch (err) {
-        console.error('Error fetching data:', err);
-      } finally {
-        setLoading(false);
+useEffect(() => {
+  const fetchData = async () => {
+    // setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (filter.from) {
+        const [fromYear, fromMonth] = filter.from.split('-');
+        params.append('fromMonth', fromMonth);
+        params.append('fromYear', fromYear);
       }
-    };
-    fetchData();
-  }, [filter]);
+      if (filter.to) {
+        const [toYear, toMonth] = filter.to.split('-');
+        params.append('toMonth', toMonth);
+        params.append('toYear', toYear);
+      }
+      if (filter.province) params.append('province', filter.province);
+      if (filter.district) params.append('district', filter.district);
+
+      const statsRes = await axios.get(`http://localhost:5000/api/stats/summary?${params.toString()}`);
+      setStats(statsRes.data);
+      const trendRes = await axios.get(`http://localhost:5000/api/stats/trend?${params.toString()}`);
+      setTrend(trendRes.data || []); // Fallback empty array
+
+      // Fetch cho package trend 
+      const packageTrendRes = await axios.get(`http://localhost:5000/api/stats/package-trend?${params.toString()}`);
+      setPackageTrend(packageTrendRes.data || []); // Fallback
+    } catch (err) {
+      console.error('Error fetching data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchData();
+}, [filter]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -137,6 +138,7 @@ const Dashboard = () => {
     },
     scales: {
       y: {
+        beginAtZero: true, suggestedMin: 0,
         ticks: { callback: (value) => value.toLocaleString() },
       },
       x: {

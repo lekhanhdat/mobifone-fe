@@ -1,5 +1,6 @@
+// src/pages/Dashboard.jsx
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from 'axios'; // Hoặc dùng instance từ utils/axios.js nếu bạn có
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -13,6 +14,7 @@ import {
   Filler,
 } from 'chart.js';
 import { BsPeople, BsPersonAdd, BsPersonDash, BsBox } from 'react-icons/bs';
+import { Link } from 'react-router-dom'; // Import Link để navigation
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
@@ -133,16 +135,18 @@ const Dashboard = () => {
 
   return (
     <div className="p-6 bg-blue-50 min-h-screen">
-      <h2 className="text-3xl font-bold text-blue-600 mb-6 mt-2">Dashboard</h2>
-      {/* Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div className="bg-white p-6 rounded-lg shadow-md flex items-center border border-blue-100 hover:shadow-lg transition-shadow">
+      <h2 className="text-3xl font-bold text-blue-600 mb-6">Dashboard</h2> {/* Thêm tiêu đề nếu cần */}
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        {/* Card Tổng số thuê bao - Link đến /subscriber */}
+        <Link to="/subscriber" className="bg-white p-6 rounded-lg shadow-md flex items-center border border-blue-100 hover:shadow-lg transition-shadow cursor-pointer">
           <BsPeople className="text-purple-600 text-4xl mr-4 bg-purple-100 p-2 rounded-full" />
           <div>
             <p className="text-sm text-gray-600">Tổng số thuê bao</p>
             <p className="text-2xl font-bold text-blue-600">{stats.total.toLocaleString()}</p>
           </div>
-        </div>
+        </Link>
+        {/* Card Thuê bao mới - Không link (theo yêu cầu chỉ 2 card cụ thể) */}
         <div className="bg-white p-6 rounded-lg shadow-md flex items-center border border-blue-100 hover:shadow-lg transition-shadow">
           <BsPersonAdd className="text-green-600 text-4xl mr-4 bg-green-100 p-2 rounded-full" />
           <div>
@@ -151,6 +155,7 @@ const Dashboard = () => {
             <PercentChange value={stats.percentNew} />
           </div>
         </div>
+        {/* Card Thuê bao hủy - Không link */}
         <div className="bg-white p-6 rounded-lg shadow-md flex items-center border border-blue-100 hover:shadow-lg transition-shadow">
           <BsPersonDash className="text-red-600 text-4xl mr-4 bg-red-100 p-2 rounded-full" />
           <div>
@@ -159,13 +164,14 @@ const Dashboard = () => {
             <PercentChange value={stats.percentCanceled} />
           </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md flex items-center border border-blue-100 hover:shadow-lg transition-shadow">
+        {/* Card Tổng số gói cước đăng ký - Link đến /package */}
+        <Link to="/package" className="bg-white p-6 rounded-lg shadow-md flex items-center border border-blue-100 hover:shadow-lg transition-shadow cursor-pointer">
           <BsBox className="text-yellow-600 text-4xl mr-4 bg-yellow-100 p-2 rounded-full" />
           <div>
             <p className="text-sm text-gray-600">Tổng số gói cước đăng ký</p>
             <p className="text-2xl font-bold text-blue-600">{stats.totalPackages.toLocaleString()}</p>
           </div>
-        </div>
+        </Link>
       </div>
       {/* Filter */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">

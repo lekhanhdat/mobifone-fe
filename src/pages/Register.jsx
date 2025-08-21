@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from "../assets/Mobifone.svg";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import instance from '../utils/axios';
 
 function Register() {
   const [email, setEmail] = useState('');

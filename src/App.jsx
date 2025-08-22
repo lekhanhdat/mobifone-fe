@@ -7,6 +7,7 @@ import Package from './pages/Package';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import PrivateRoute from './components/PrivateRoute'; 
+import ComingSoon from './pages/Comingsoon';
 
 const App = () => {
   return (
@@ -19,6 +20,13 @@ const App = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/subscriber" element={<Subscriber />} />
             <Route path="/package" element={<Package />} />
+            {/* All to ComingSoon */}
+            <Route path="/orders" element={<ComingSoon />} />
+            <Route path="/todo" element={<ComingSoon />} />
+            <Route path="/contact" element={<ComingSoon />} />
+            <Route path="/invoice" element={<ComingSoon />} />
+            <Route path="/profile" element={<ComingSoon />} />
+            <Route path="/settings" element={<ComingSoon />} />
           </Route>
         </Route>
       </Routes>

@@ -157,7 +157,7 @@ useEffect(() => {
 
   return (
     <div className="p-6 bg-blue-50 min-h-screen">
-      <h2 className="text-3xl font-bold text-blue-600 mb-6">Dashboard</h2>
+      <h2 className="text-3xl font-bold text-blue-600 mb-6 mt-2">Dashboard</h2>
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         {/* Card Tổng số thuê bao - Link đến /subscriber */}

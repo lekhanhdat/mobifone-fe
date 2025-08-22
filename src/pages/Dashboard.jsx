@@ -222,7 +222,7 @@ useEffect(() => {
       </div>
       {/* Line Chart */}
       {/* Biểu đồ đường hiện tại (thuê bao) */}
-      <div className="bg-white p-6 rounded-lg shadow-md border border-blue-100 mb-6"> {/* Thêm mb-6 để khoảng cách với biểu đồ mới */}
+      <div className="bg-white p-6 rounded-lg shadow-md border border-blue-100 mb-6">
         <h3 className="text-xl font-bold text-blue-600 mb-4">Xu hướng phát triển thuê bao (dựa trên thuê bao mới)</h3>
         <Line data={lineData} options={lineOptions} />
       </div>

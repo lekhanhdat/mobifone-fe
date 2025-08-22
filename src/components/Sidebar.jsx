@@ -21,6 +21,11 @@ const Sidebar = ({ isOpen }) => {
     ${isActive ? "text-blue-600 bg-blue-100" : ""}
     ${isOpen ? "w-full justify-start px-4" : "w-16 justify-center"}
   `;
+  const itemClassLogout = (isActive = false) => `
+    flex items-center h-12 text-gray-700 hover:text-red-600 hover:bg-red-100 rounded cursor-pointer transition-all duration-300
+    ${isActive ? "text-red-600 bg-red-100" : ""}
+    ${isOpen ? "w-full justify-start px-4" : "w-16 justify-center"}
+  `;
 
   const menuItems = [
     { label: "Dashboard", icon: BsCircle, path: "/" },
@@ -32,7 +37,7 @@ const Sidebar = ({ isOpen }) => {
     { label: "Invoice", icon: BsReceipt, path: "/invoice" },
     { label: "Profile", icon: BsPerson, path: "/profile" },
     { label: "Settings", icon: BsGear, path: "/settings" },
-    { label: "Logout", icon: BsBoxArrowRight, path: "/logout" }, // sau này logic xong chuyển path thành #
+    { label: "Logout", icon: BsBoxArrowRight, path: "/logout" }, 
   ];
 
   const navigate = useNavigate();
@@ -61,7 +66,7 @@ const Sidebar = ({ isOpen }) => {
             {item.label === "Logout" ? (
               <button
                 onClick={handleLogout}  // Click logout
-                className={itemClass(false)}  // Style giống NavLink, no active
+                className={itemClassLogout(false)} 
               >
                 <span className="flex items-center justify-center w-8 h-8">
                   <item.icon size={20} />

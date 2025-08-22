@@ -88,21 +88,21 @@ const Package = () => {
 
   return (
     <div className="p-6 bg-blue-50 min-h-screen">
-      <h2 className="text-3xl font-bold text-blue-600 mb-6 mt-2">Quản Lý Gói Cước</h2>
+      <h2 className="text-2xl font-bold text-blue-600 mb-6 mt-2">Quản Lý Gói Cước</h2>
 
-      <div className="flex flex-col md:flex-row justify-between mb-8">
-        <div className="w-full md:w-1/2 p-4 bg-white rounded shadow">
-          <h3 className="text-lg font-semibold mb-2 text-blue-600">Phân Bổ Thuê Bao Có Gói Cước Theo Tỉnh</h3>
-          <Pie data={pieProvince} options={{ responsive: true, plugins: { legend: { position: 'right' } } }} />
+      <div className="flex flex-col md:flex-row justify-between mb-6">
+        <div className="w-full md:w-1/2 p-4 bg-white rounded shadow" style={{ height: '560px' }}>
+          <h3 className="text-xl font-bold text-blue-600 text-center">Phân Bổ Gói Cước Theo Tỉnh</h3>
+          <Pie data={pieProvince} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }} />
         </div>
-        <div className="w-full md:w-1/2 p-4 bg-white rounded shadow mt-4 md:mt-0 md:ml-4">
-          <h3 className="text-lg font-semibold mb-2 text-blue-600">Phân Bổ Thuê Bao Có Gói Cước Theo Quận/Huyện</h3>
-          <Pie data={pieDistrict} options={{ responsive: true, plugins: { legend: { position: 'right' } } }} />
+        <div className="w-full md:w-1/2 p-4 bg-white rounded shadow mt-4 md:mt-0 md:ml-6" style={{ height: '560px' }}>
+          <h3 className="text-xl font-bold text-blue-600 text-center">Phân Bổ Gói Cước Theo Quận/Huyện</h3>
+          <Pie data={pieDistrict} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }} />
         </div>
       </div>
 
       <div className="mb-8 bg-white p-4 rounded shadow">
-        <h3 className="text-lg font-bold mb-2">Thêm Gói Cước Mới</h3>
+        <h3 className="text-xl font-bold mb-3 text-blue-600">Thêm Gói Cước Mới</h3>
         <form onSubmit={handleAddPackage} className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input type="text" name="PCK_CODE" value={newPackage.PCK_CODE} onChange={handleNewPackageChange} placeholder="Tên gói cước (PCK_CODE)" className="p-2 border rounded" required />
           <input type="number" name="PCK_CHARGE" value={newPackage.PCK_CHARGE} onChange={handleNewPackageChange} placeholder="Giá gói cước (PCK_CHARGE)" className="p-2 border rounded" required />
@@ -111,8 +111,8 @@ const Package = () => {
       </div>
 
       <div className="mb-8 bg-white p-4 rounded shadow relative">
-        <div className="flex justify-between items-center mb-8">
-          <h3 className="text-xl font-bold text-blue-600 mb-4">Danh Sách Gói Cước (Chỉ Có Gói)</h3>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-bold text-blue-600">Danh Sách Gói Cước</h3>
           <input type="text" value={filters.search} onChange={handleSearchChange} placeholder="Tìm tên gói cước" className="w-1/3 p-2 border rounded focus:outline-none focus:border-blue-600" />
         </div>
 

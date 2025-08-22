@@ -240,21 +240,21 @@ const Subscriber = () => {
 
   return (
     <div className="p-6 bg-blue-50 min-h-screen">
-      <h2 className="text-3xl font-bold text-blue-600 mb-6 mt-2"> Quản Lý Thuê Bao</h2>
+      <h2 className="text-2xl font-bold text-blue-600 mb-6 mt-2">Quản Lý Thuê Bao</h2>
 
-      <div className="flex flex-col md:flex-row justify-between mb-8">
-        <div className="w-full md:w-1/2 p-4 bg-white rounded shadow">
-          <h3 className="text-lg font-semibold mb-2 text-blue-600">Tỉ Lệ Tỉnh Thành</h3>
-          <Pie data={pieProvince} options={{ responsive: true, plugins: { legend: { position: 'right' } } }} />
+      <div className="flex flex-col md:flex-row justify-between mb-6">
+        <div className="w-full md:w-1/2 p-4 bg-white rounded shadow" style={{ height: '560px' }}>
+          <h3 className="text-xl font-bold text-blue-600 text-center">Tỉ Lệ Thuê Bao Theo Tỉnh</h3>
+          <Pie data={pieProvince} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }} />
         </div>
-        <div className="w-full md:w-1/2 p-4 bg-white rounded shadow mt-4 md:mt-0 md:ml-4">
-          <h3 className="text-lg font-semibold mb-2 text-blue-600">Tỉ Lệ Quận/Huyện</h3>
-          <Pie data={pieDistrict} options={{ responsive: true, plugins: { legend: { position: 'right' } } }} />
+        <div className="w-full md:w-1/2 p-4 bg-white rounded shadow mt-4 md:mt-0 md:ml-6" style={{ height: '560px' }}>
+          <h3 className="text-xl font-bold text-blue-600 text-center">Tỉ Lệ Thuê Bao Theo Quận/Huyện</h3>
+          <Pie data={pieDistrict} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }} />
         </div>
       </div>
 
-      <div className="mb-8 bg-white p-4 rounded shadow">
-        <h3 className="text-lg font-semibold mb-2 text-blue-600">Thêm Thuê Bao Mới</h3>
+      <div className="mb-6 bg-white p-4 rounded shadow">
+        <h3 className="text-xl font-bold mb-3 text-blue-600">Thêm Thuê Bao Mới</h3>
         <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <input name="SUB_ID" value={newSub.SUB_ID} onChange={(e) => setNewSub({ ...newSub, SUB_ID: e.target.value })} placeholder="Mã thuê bao (SUB_ID)" className="p-2 border rounded" required />
           <select name="TYPE" value={newSub.TYPE} onChange={(e) => setNewSub({ ...newSub, TYPE: e.target.value })} className="p-2 border rounded" required>
@@ -307,85 +307,8 @@ const Subscriber = () => {
         </form>
       </div>
 
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-bold text-blue-600">Danh Sách Thuê Bao</h3>
-        <input
-          name="search"
-          value={filters.search}
-          onChange={handleFilterChange}
-          placeholder="Tìm số thuê bao (SUB_ID)"
-          className="p-2 border rounded w-1/3"
-        />
-      </div>
-
-      <div className="flex flex-wrap mb-4 gap-4">
-        <select name="type" value={filters.type} onChange={handleFilterChange} className="p-2 border rounded">
-          <option value="">Hình thức (TYPE)</option>
-          {(options.types || []).map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-        </select>
-        <select name="staType" value={filters.staType} onChange={handleFilterChange} className="p-2 border rounded">
-          <option value="">Loại hòa mạng (STA_TYPE)</option>
-          {(options.staTypes || []).map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-        </select>
-        <select name="province" value={filters.province} onChange={handleFilterChange} className="p-2 border rounded">
-          <option value="">Tỉnh (PROVINCE)</option>
-          {(options.provinces || []).map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
-        </select>
-        <select name="district" value={filters.district} onChange={handleFilterChange} className="p-2 border rounded" disabled={!filters.province}>
-          <option value="">Huyện (DISTRICT)</option>
-          {districtOptions.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
-        </select>
-        <select name="subType" value={filters.subType} onChange={handleFilterChange} className="p-2 border rounded">
-          <option value="">Loại thuê bao (SUB_TYPE)</option>
-          {(options.subTypes || []).map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-        </select>
-        <button onClick={resetFilters} className="px-4 py-2 bg-blue-100 text-blue-600 rounded hover:bg-blue-200">Reset</button>
-      </div>
-
-      {loading ? <p className="text-blue-600">Đang tải...</p> : (
-        <div className="overflow-x-auto bg-white rounded shadow">
-          <table className="w-full">
-            <thead className="bg-blue-100">
-              <tr>
-                <th className="p-2 text-left">Mã thuê bao</th>
-                <th className="p-2 text-left">Hình thức</th>
-                <th className="p-2 text-left">Loại hòa mạng</th>
-                <th className="p-2 text-left">Ngày hòa mạng</th>
-                <th className="p-2 text-left">Loại thuê bao</th>
-                <th className="p-2 text-left">Tỉnh</th>
-                <th className="p-2 text-left">Huyện</th>
-                <th className="p-2 text-left">Mã gói cước</th>
-                <th className="p-2 text-left">Ngày đăng ký</th>
-                <th className="p-2 text-left">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {subscribers.map(sub => (
-                <tr key={sub._id} onClick={() => openDetails(sub)} className="cursor-pointer hover:bg-blue-50">
-                  <td className="p-2">{sub.SUB_ID.toLocaleString()}</td>
-                  <td className="p-2">{mapType(sub.TYPE)}</td>
-                  <td className="p-2">{sub.fullStaType}</td>
-                  <td className="p-2">{new Date(sub.STA_DATE).toLocaleDateString()}</td>
-                  <td className="p-2">{sub.fullSubType}</td>
-                  <td className="p-2">{sub.fullProvince}</td>
-                  <td className="p-2">{sub.fullDistrict}</td>
-                  <td className="p-2">{sub.PCK_CODE}</td>
-                  <td className="p-2">{sub.PCK_DATE ? new Date(sub.PCK_DATE).toLocaleDateString() : ''}</td>
-                  <td className="p-2">
-                    <button onClick={(e) => { e.stopPropagation(); handleDelete(sub._id); }} className="text-red-600 hover:underline">Delete</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-      {pagination}
-
-      <button onClick={exportCSV} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Export CSV</button>
-
-      <div className="mt-8 bg-white p-4 rounded shadow">
-        <h3 className="text-lg font-semibold mb-2 text-blue-600">Báo Cáo Breakdown</h3>
+      <div className="mt-6 mb-6 bg-white p-4 rounded shadow">
+        <h3 className="text-xl font-bold mb-3 text-blue-600">Báo Cáo Breakdown</h3>
         <div className="flex mb-4">
           <button onClick={() => setBreakdownTab('province-district')} className={`px-4 py-2 ${breakdownTab === 'province-district' ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-600'} rounded-l`}>Tỉnh/Huyện</button>
           <button onClick={() => setBreakdownTab('type')} className={`px-4 py-2 ${breakdownTab === 'type' ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-600'}`}>Hình thức</button>
@@ -407,8 +330,94 @@ const Subscriber = () => {
         </table>
       </div>
 
+      <div className="mt-6 bg-white p-4 rounded shadow">
+        <div className="flex justify-between items-center">
+          <h3 className="text-xl font-bold mb-3 ml-1 text-blue-600">Danh Sách Thuê Bao</h3>
+
+        </div>
+
+        <div className="flex flex-wrap mb-4 gap-4">
+          <input
+            name="search"
+            value={filters.search}
+            onChange={handleFilterChange}
+            placeholder="Tìm số thuê bao (SUB_ID)"
+            className="p-2 border rounded w-1/3"
+          />
+          <select name="type" value={filters.type} onChange={handleFilterChange} className="p-2 border rounded">
+            <option value="">Hình thức (TYPE)</option>
+            {(options.types || []).map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+          </select>
+          <select name="staType" value={filters.staType} onChange={handleFilterChange} className="p-2 border rounded">
+            <option value="">Loại hòa mạng (STA_TYPE)</option>
+            {(options.staTypes || []).map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+          </select>
+          <select name="province" value={filters.province} onChange={handleFilterChange} className="p-2 border rounded">
+            <option value="">Tỉnh (PROVINCE)</option>
+            {(options.provinces || []).map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+          </select>
+          <select name="district" value={filters.district} onChange={handleFilterChange} className="p-2 border rounded" disabled={!filters.province}>
+            <option value="">Huyện (DISTRICT)</option>
+            {districtOptions.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
+          </select>
+          <select name="subType" value={filters.subType} onChange={handleFilterChange} className="p-2 border rounded">
+            <option value="">Loại thuê bao (SUB_TYPE)</option>
+            {(options.subTypes || []).map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+          </select>
+          <button onClick={resetFilters} className="px-4 py-2 bg-blue-100 text-blue-600 rounded hover:bg-blue-200">Reset</button>
+        </div>
+
+        {loading ? <p className="text-blue-600">Đang tải...</p> : (
+          <div className="overflow-x-auto bg-white rounded shadow">
+            <table className="w-full">
+              <thead className="bg-blue-200">
+                <tr>
+                  <th className="p-2 text-left">Mã thuê bao</th>
+                  <th className="p-2 text-left">Hình thức</th>
+                  <th className="p-2 text-left">Loại hòa mạng</th>
+                  <th className="p-2 text-left">Ngày hòa mạng</th>
+                  <th className="p-2 text-left">Loại thuê bao</th>
+                  <th className="p-2 text-left">Tỉnh</th>
+                  <th className="p-2 text-left">Huyện</th>
+                  <th className="p-2 text-left">Mã gói cước</th>
+                  <th className="p-2 text-left">Ngày đăng ký</th>
+                  <th className="p-2 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {subscribers.map(sub => (
+                  <tr key={sub._id} onClick={() => openDetails(sub)} className="cursor-pointer hover:bg-blue-50 bg-blue-50">
+                    <td className="p-2">{sub.SUB_ID.toLocaleString()}</td>
+                    <td className="p-2">{mapType(sub.TYPE)}</td>
+                    <td className="p-2">{sub.fullStaType}</td>
+                    <td className="p-2">{new Date(sub.STA_DATE).toLocaleDateString()}</td>
+                    <td className="p-2">{sub.fullSubType}</td>
+                    <td className="p-2">{sub.fullProvince}</td>
+                    <td className="p-2">{sub.fullDistrict}</td>
+                    <td className="p-2">{sub.PCK_CODE}</td>
+                    <td className="p-2">{sub.PCK_DATE ? new Date(sub.PCK_DATE).toLocaleDateString() : ''}</td>
+                    <td className="p-2">
+                      <button onClick={(e) => { e.stopPropagation(); handleDelete(sub._id); }} className="text-red-600 hover:underline">Delete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {pagination}
+
+        <button onClick={exportCSV} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Export CSV</button>
+
+      </div>
+
+
+
+
+
+
       {selectedSub && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10">
           <div ref={modalRef} className="bg-white p-6 rounded shadow-lg w-3/4 md:w-2/3 overflow-y-auto max-h-[80vh] grid md:grid-cols-2 gap-4">
             <h3 className="text-lg font-bold mb-4 text-blue-600 col-span-2">{isEdit ? 'Chỉnh Sửa' : 'Chi Tiết'} Thuê Bao</h3>
             {isEdit ? (

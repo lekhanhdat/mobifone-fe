@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const instance = axios.create({ baseURL: 'http://localhost:5000' });  // Backend URL
+const instance = axios.create({
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000', // Fallback local, env for deploy
+});
 
 instance.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');

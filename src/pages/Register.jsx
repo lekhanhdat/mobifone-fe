@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
 import logo from "../assets/Mobifone.svg";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import instance from '../utils/axios';
@@ -17,7 +17,7 @@ function Register() {
     e.preventDefault();
     setError('');
     try {
-      await instance.post('http://localhost:5000/api/auth/register', { email, username, password, fullName });
+      await instance.post('/api/auth/register', { email, username, password, fullName });
       alert('Đăng ký thành công! Hãy đăng nhập.');
       navigate('/login');
     } catch (err) {

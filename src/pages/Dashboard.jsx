@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; 
+// import axios from 'axios'; 
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -29,7 +29,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/subscribers/options');
+        const res = await instance.get('/api/subscribers/options');
         setOptions(res.data);
       } catch (err) {
         console.error('Error fetching options:', err);
@@ -42,7 +42,7 @@ const Dashboard = () => {
     const fetchDistricts = async () => {
       if (filter.province) {
         try {
-          const res = await axios.get(`http://localhost:5000/api/subscribers/districts?province=${filter.province}`);
+          const res = await instance.get(`/api/subscribers/districts?province=${filter.province}`);
           setDistrictOptions(res.data);
         } catch (err) {
           console.error('Error fetching districts:', err);
@@ -73,13 +73,13 @@ useEffect(() => {
       if (filter.province) params.append('province', filter.province);
       if (filter.district) params.append('district', filter.district);
 
-      const statsRes = await axios.get(`http://localhost:5000/api/stats/summary?${params.toString()}`);
+      const statsRes = await instance.get(`/api/stats/summary?${params.toString()}`);
       setStats(statsRes.data);
-      const trendRes = await axios.get(`http://localhost:5000/api/stats/trend?${params.toString()}`);
+      const trendRes = await instance.get(`/api/stats/trend?${params.toString()}`);
       setTrend(trendRes.data || []); // Fallback empty array
 
       // Fetch cho package trend 
-      const packageTrendRes = await axios.get(`http://localhost:5000/api/stats/package-trend?${params.toString()}`);
+      const packageTrendRes = await instance.get(`/api/stats/package-trend?${params.toString()}`);
       setPackageTrend(packageTrendRes.data || []); // Fallback
     } catch (err) {
       console.error('Error fetching data:', err);

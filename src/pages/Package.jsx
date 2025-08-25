@@ -21,7 +21,7 @@ const Package = () => {
         sortBy: filters.sortBy,
         sortOrder: filters.sortOrder
       });
-      const response = await axios.get(`http://localhost:5000/api/stats/packages?${params}`);
+      const response = await instance.get(`/api/stats/packages?${params}`);
       setPackages(response.data);
     } catch (err) {
       console.error('Error fetching packages:', err);
@@ -37,8 +37,8 @@ const Package = () => {
     const fetchPies = async () => {
       try {
         const [prov, dist] = await Promise.all([
-          axios.get('http://localhost:5000/api/subscribers/pie?groupBy=province&hasPackage=true'),
-          axios.get('http://localhost:5000/api/subscribers/pie?groupBy=district&hasPackage=true')
+          instance.get('/api/subscribers/pie?groupBy=province&hasPackage=true'),
+          instance.get('/api/subscribers/pie?groupBy=district&hasPackage=true')
         ]);
         const totalProv = prov.data.reduce((sum, item) => sum + item.value, 0);
         const totalDist = dist.data.reduce((sum, item) => sum + item.value, 0);
@@ -77,7 +77,7 @@ const Package = () => {
   const handleAddPackage = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/packages', newPackage);
+      const response = await instance.post('/api/packages', newPackage);
       setNewPackage({ PCK_CODE: '', PCK_CHARGE: '' });
       fetchPackages(); // Refresh table
       alert(response.data.message); // 'Thêm thành công'

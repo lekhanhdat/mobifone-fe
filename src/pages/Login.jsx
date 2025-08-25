@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
 import instance from '../utils/axios';
 import logo from "../assets/Mobifone.svg";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -16,7 +16,7 @@ function Login() {
     e.preventDefault();
     setError('');
     try {
-      const res = await instance.post('http://localhost:5000/api/auth/login', { identifier: email, password });
+      const res = await instance.post('/api/auth/login', { identifier: email, password });
       localStorage.setItem('token', res.data.token);  // Lưu token
       localStorage.setItem('user', JSON.stringify(res.data.user));  // Lưu user object (fullName, etc.)
       navigate('/');  // Redirect to dashboard

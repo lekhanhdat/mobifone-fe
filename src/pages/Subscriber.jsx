@@ -33,7 +33,7 @@ const Subscriber = () => {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/subscribers/options');
+        const res = await instance.get('/api/subscribers/options');
         setOptions(res.data);
       } catch (err) {
         console.error('Error fetching options:', err);
@@ -45,7 +45,7 @@ const Subscriber = () => {
   useEffect(() => {
     const prov = filters.province || newSub.PROVINCE || (selectedSub ? selectedSub.PROVINCE : '');
     if (prov) {
-      axios.get(`http://localhost:5000/api/subscribers/districts?province=${prov}`)
+      instance.get(`/api/subscribers/districts?province=${prov}`)
         .then(res => setDistrictOptions(res.data))
         .catch(err => console.error('Error fetching districts:', err));
     } else {
@@ -65,7 +65,7 @@ const Subscriber = () => {
         ...(filters.district && { district: filters.district }),
         ...(filters.search && { search: filters.search })
       });
-      const res = await axios.get(`http://localhost:5000/api/subscribers?${params}`);
+      const res = await instance.get(`/api/subscribers?${params}`);
       setSubscribers(res.data.subscribers);
       setTotal(res.data.total);
     } catch (err) {
@@ -82,8 +82,8 @@ const Subscriber = () => {
     const fetchPies = async () => {
       try {
         const [prov, dist] = await Promise.all([
-          axios.get('http://localhost:5000/api/subscribers/pie?groupBy=province'),
-          axios.get('http://localhost:5000/api/subscribers/pie?groupBy=district')
+          instance.get('/api/subscribers/pie?groupBy=province'),
+          instance.get('/api/subscribers/pie?groupBy=district')
         ]);
         const totalProv = prov.data.reduce((sum, item) => sum + item.value, 0);
         const totalDist = dist.data.reduce((sum, item) => sum + item.value, 0);
@@ -108,7 +108,7 @@ const Subscriber = () => {
   useEffect(() => {
     const fetchBreakdown = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/subscribers/breakdown?groupBy=${breakdownTab}`);
+        const res = await instance.get(`/api/subscribers/breakdown?groupBy=${breakdownTab}`);
         setBreakdownData(res.data);
       } catch (err) {
         console.error('Error fetching breakdown:', err);
@@ -131,7 +131,7 @@ const Subscriber = () => {
   const handleAdd = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/subscribers', newSub);
+      await instance.post('/api/subscribers', newSub);
       setNewSub({ TYPE: '', STA_TYPE: '', SUB_ID: '', SUB_TYPE: '', STA_DATE: '', END_DATE: '', PROVINCE: '', DISTRICT: '', PCK_CODE: '', PCK_DATE: '', PCK_CHARGE: '' });
       fetchSubs();
       alert('Thêm thành công!');
@@ -158,7 +158,7 @@ const Subscriber = () => {
         PCK_DATE: selectedSub.PCK_DATE,
         PCK_CHARGE: selectedSub.PCK_CHARGE
       };
-      await axios.put(`http://localhost:5000/api/subscribers/${selectedSub._id}`, cleanBody);
+      await instance.put(`/api/subscribers/${selectedSub._id}`, cleanBody);
       setIsEdit(false);
       setSelectedSub(null);
       fetchSubs();
@@ -172,7 +172,7 @@ const Subscriber = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Xác nhận xóa?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/subscribers/${id}`);
+        await instance.delete(`/api/subscribers/${id}`);
         fetchSubs(); // Refresh immediately
         alert('Xóa thành công!');
       } catch (err) {

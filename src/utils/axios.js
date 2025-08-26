@@ -6,6 +6,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
+  config.headers['Cache-Control'] = 'no-cache';
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000', // Fallback local, env for deploy
+  baseURL: process.env.REACT_APP_API_URL, // Fallback local, env for deploy
 });
 
 instance.interceptors.request.use((config) => {
